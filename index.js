@@ -86,3 +86,38 @@ document.getElementById("purchaseForm").addEventListener("submit", function (e) 
   `;
   document.getElementById("confirmation").classList.remove("hidden");
 });
+
+/* ==== Trading Chart / Ticker Simulation ==== */
+const tradingPairs = [
+  { symbol: "BTC/USDT", price: 65875.12 },
+  { symbol: "ETH/USDT", price: 3234.55 },
+  { symbol: "BNB/USDT", price: 581.32 },
+  { symbol: "SOL/USDT", price: 143.88 },
+  { symbol: "XRP/USDT", price: 0.62 },
+  { symbol: "DOGE/USDT", price: 0.148 },
+  { symbol: "ADA/USDT", price: 0.482 }
+];
+
+const tickerContainer = document.querySelector(".trading-ticker");
+
+function renderTicker() {
+  tickerContainer.innerHTML = "";
+  tradingPairs.forEach(pair => {
+    const div = document.createElement("div");
+    div.className = "ticker-item";
+
+    const oldPrice = pair.price;
+    const change = (Math.random() - 0.5) * 2; // simulate fluctuation
+    pair.price = +(pair.price + change).toFixed(2);
+    const up = pair.price > oldPrice;
+
+    div.innerHTML = `
+      <span>${pair.symbol}</span>
+      <span class="price-change ${up ? "up" : "down"}">${pair.price}</span>
+    `;
+    tickerContainer.appendChild(div);
+  });
+}
+
+renderTicker();
+setInterval(renderTicker, 4000); // update every 4 seconds
